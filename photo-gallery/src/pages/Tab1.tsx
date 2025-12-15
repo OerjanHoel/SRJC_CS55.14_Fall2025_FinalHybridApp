@@ -26,8 +26,8 @@ const Tab1: React.FC = () => {
         const origin = new URL(API_URL).origin;
 
         const processed = await Promise.all(
-          data.map(async (p) => {
-            const acf = p.acf || {};
+          data.map(async (planet) => {
+            const acf = planet.acf || {};
             const imgField = acf.image;
             let imageUrl: string | undefined;
 
@@ -39,7 +39,7 @@ const Tab1: React.FC = () => {
                   const mediaJson = await mediaRes.json();
                   imageUrl = mediaJson.source_url || mediaJson.guid?.rendered;
                 }
-              } catch (e) {
+              } catch (error) {
                 // ignore
               }
             } else if (typeof imgField === 'string') {
@@ -49,13 +49,13 @@ const Tab1: React.FC = () => {
               if (imageUrl && imageUrl.startsWith('/')) imageUrl = `${origin}${imageUrl}`;
             }
 
-            return { ...p, imageUrl } as Planet;
+            return { ...planet, imageUrl } as Planet;
           })
         );
 
         if (mounted) setPlanets(processed);
-      } catch (e: any) {
-        setError(e.message || 'Failed to load');
+      } catch (error: any) {
+        setError(error.message || 'Failed to load');
       } finally {
         if (mounted) setLoading(false);
       }
@@ -96,15 +96,15 @@ const Tab1: React.FC = () => {
 
         {!loading && !error && (
           <IonList>
-            {planets.map((p) => {
-              const acf = p.acf || {};
+            {planets.map((planet) => {
+              const acf = planet.acf || {};
               const name = acf.name || acf.title || 'Untitled';
               const description = acf.description || '';
               const firstDiscovered = acf.first_discovered || '';
-              const src = p.imageUrl;
+              const src = planet.imageUrl;
 
               return (
-                <IonItem key={p.id} lines="full">
+                <IonItem key={planet.id} lines="full">
                   <div className="planet-item">
                     {src ? (
                       <img className="planet-image" src={src} alt={name} />
