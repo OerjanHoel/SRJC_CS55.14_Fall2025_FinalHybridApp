@@ -1,0 +1,59 @@
+/* Tab1 styles: image above centered text, two fonts, italic for first_discovered */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
+
+.tab-status {
+	padding: 16px;
+}
+.tab-error {
+	color: red;
+}
+
+.planet-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 0;
+}
+
+.planet-image {
+	width: 100%;
+	max-width: 180px;
+	height: auto;
+	object-fit: cover;
+	border-radius: 6px;
+}
+.planet-image.placeholder {
+	background: #eee;
+	width: 100%;
+	max-width: 180px;
+	height: 150px;
+}
+
+.planet-text {
+	text-align: left;
+	max-width: 560px;
+}
+
+.planet-title {
+	margin: 0 0 6px 0;
+	font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	font-weight: 600;
+}
+
+.planet-description {
+	margin: 0 0 8px 0;
+	font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+}
+
+.planet-first {
+	margin: 0;
+	font-style: italic;
+	font-family: 'Source Serif 4', Georgia, serif;
+}
+
+@media (max-width: 480px) {
+	.planet-image { width: 140px; height: 130px; }
+}
+
+
