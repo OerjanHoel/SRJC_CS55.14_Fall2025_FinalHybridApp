@@ -24,8 +24,8 @@ const Tab3: React.FC = () => {
         const data = await res.json();
         const origin = new URL(API_URL).origin;
 
-        const processed = data.map((a: any) => {
-          const acf = a.acf || {};
+        const processed = data.map((agency: any) => {
+          const acf = agency.acf || {};
           const imgField = acf.image;
           let imageUrl: string | undefined;
           if (typeof imgField === 'number') {
@@ -36,12 +36,12 @@ const Tab3: React.FC = () => {
             imageUrl = imgField.source_url || imgField.url || imgField.sizes?.medium || imgField.guid?.rendered;
             if (imageUrl && imageUrl.startsWith('/')) imageUrl = `${origin}${imageUrl}`;
           }
-          return { id: a.id, acf, imageUrl } as Agency;
+          return { id: agency.id, acf, imageUrl } as Agency;
         });
 
         if (mounted) setAgencies(processed);
-      } catch (e: any) {
-        setError(e.message || 'Failed to load');
+      } catch (error: any) {
+        setError(error.message || 'Failed to load');
       } finally {
         if (mounted) setLoading(false);
       }
@@ -69,15 +69,15 @@ const Tab3: React.FC = () => {
 
         {!loading && !error && (
           <IonList>
-            {agencies.map((a) => {
-              const acf = a.acf || {};
+            {agencies.map((agency) => {
+              const acf = agency.acf || {};
               const name = acf.name || acf.title || 'Untitled';
               const description = acf.description || '';
               const website = acf.website || '';
-              const src = a.imageUrl;
+              const src = agency.imageUrl;
 
               return (
-                <IonItem key={a.id} lines="full">
+                <IonItem key={agency.id} lines="full">
                   <div className="agency-item">
                     {src ? (
                       <img className="agency-image" src={src} alt={name} />

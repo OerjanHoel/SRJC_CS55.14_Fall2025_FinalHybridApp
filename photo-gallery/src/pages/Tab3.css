@@ -1,0 +1,66 @@
+/* Copied from Tab1.css — styles for agency list */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
+
+.tab-status {
+	padding: 16px;
+}
+.tab-error {
+	color: red;
+}
+
+.agency-item {
+	display: flex;
+ 	flex-direction: column;
+ 	align-items: center;
+ 	gap: 10px;
+ 	padding: 12px 0;
+}
+
+.agency-item {
+	max-width: 760px;
+ 	margin: 0 auto;
+}
+
+.agency-image {
+ 	width: 100%;
+ 	max-width: 480px;
+ 	height: auto;
+ 	object-fit: contain;
+ 	border-radius: 6px;
+}
+.agency-image.placeholder {
+ 	background: #eee;
+ 	width: 100%;
+ 	max-width: 480px;
+ 	height: 240px;
+}
+
+@media (min-width: 1200px) {
+  .agency-image { max-width: 520px; }
+}
+
+.agency-text {
+ 	text-align: left;
+ 	max-width: 560px;
+}
+
+.agency-title {
+ 	margin: 0 0 6px 0;
+ 	font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+ 	font-weight: 600;
+}
+
+.agency-description {
+ 	margin: 0 0 8px 0;
+ 	font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+}
+
+.agency-website {
+ 	margin: 0;
+ 	font-style: italic;
+ 	font-family: 'Source Serif 4', Georgia, serif;
+}
+
+@media (max-width: 480px) {
+ 	.agency-image { width: 140px; height: 130px; }
+}
