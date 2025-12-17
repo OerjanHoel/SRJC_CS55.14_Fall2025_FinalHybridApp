@@ -26,6 +26,19 @@ const Tab3: React.FC = () => {
   // Side-effect: fetch agency data once on mount
   useEffect(() => {
     let mounted = true;
+
+    // Small helper to resolve ACF image shapes into an absolute URL synchronously.
+    const resolveImageUrl = (imgField: any, origin: string): string | undefined => {
+      if (!imgField) return undefined;
+      if (typeof imgField === 'string') return imgField.startsWith('http') ? imgField : `${origin}${imgField}`;
+      if (typeof imgField === 'object') {
+        const url = imgField.source_url || imgField.url || imgField.sizes?.medium || imgField.sizes?.thumbnail || imgField.guid?.rendered;
+        return url ? (url.startsWith('/') ? `${origin}${url}` : url) : undefined;
+      }
+      // If it's a numeric media ID, skip resolving here for simplicity.
+      return undefined;
+    };
+
     const fetchAgencies = async () => {
       try {
         const res = await fetch(API_URL);
@@ -33,23 +46,12 @@ const Tab3: React.FC = () => {
         const data = await res.json();
         const origin = new URL(API_URL).origin;
 
-        // Process each item to normalize/resolve the ACF image into an absolute URL
-        const processed = data.map((agency: any) => {
-            const acf = agency.acf || {};
-          const imgField = acf.image;
-          let imageUrl: string | undefined;
-          if (typeof imgField === 'number') {
-            imageUrl = `${origin}/wp-content/uploads/`; // fallback — will be refined if needed
-          } else if (typeof imgField === 'string') {
-            imageUrl = imgField.startsWith('http') ? imgField : `${origin}${imgField}`;
-          } else if (imgField && typeof imgField === 'object') {
-            imageUrl = imgField.source_url || imgField.url || imgField.sizes?.medium || imgField.guid?.rendered;
-            if (imageUrl && imageUrl.startsWith('/')) imageUrl = `${origin}${imageUrl}`;
-          }
-          return { id: agency.id, acf, imageUrl } as Agency;
-        });
+        const processed: Agency[] = data.map((agency: any) => ({
+          id: agency.id,
+          acf: agency.acf || {},
+          imageUrl: resolveImageUrl(agency.acf?.image, origin),
+        }));
 
-        // Update state only if component still mounted
         if (mounted) setAgencies(processed);
       } catch (error: any) {
         setError(error.message || 'Failed to load');
@@ -57,6 +59,7 @@ const Tab3: React.FC = () => {
         if (mounted) setLoading(false);
       }
     };
+
     fetchAgencies();
     return () => { mounted = false; };
   }, []);
